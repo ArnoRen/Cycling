@@ -1,4 +1,5 @@
-import cycling.BadMiniCyclingPortalImpl;
+import java.util.Arrays;
+
 import cycling.CyclingPortal;
 import cycling.CyclingPortalImpl;
 import cycling.IllegalNameException;
@@ -11,7 +12,14 @@ public class Tester {
         
         MiniCyclingPortal portal = new CyclingPortalImpl();
 
-        System.out.println(portal.getRaceIds());
+        System.out.println(Arrays.toString(portal.getRaceIds()));
+        try {
+            System.out.println(portal.createRace("Porsche","Penske"));
+        } catch (IllegalNameException e) {
+            e.printStackTrace();
+        } catch (InvalidNameException e) {
+            e.printStackTrace();
+        }
 
     }
     

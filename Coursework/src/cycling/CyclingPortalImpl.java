@@ -1,9 +1,14 @@
 package cycling;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Random;
+
+import javax.print.DocFlavor.STRING;
 
 
 /**
@@ -17,23 +22,34 @@ import java.time.LocalTime;
 
 
 public class CyclingPortalImpl implements CyclingPortal {
+
+	private int[] raceIDsList = new int[10];
+	private ArrayList<List> race = new ArrayList<>();
+	private ArrayList<String> teams = new ArrayList<>();
+	private int theraceID = 0;
 	
-	private int[] raceIDs;
 
 	@Override
 	public int[] getRaceIds() {
-		return raceIDs;
+		return raceIDsList;
 	}
 
 	@Override
 	public int createRace(String name, String description) throws IllegalNameException, InvalidNameException {
-		return 0;
+		if (!name.getClass().equals(String.class)||name.equals(null)){
+			throw new InvalidNameException("Name must be String!");
+		};
+		theraceID++;
+		race.add(Arrays.asList(theraceID,name, description));
+		raceIDsList[theraceID]=theraceID; //PROBLEM
+		return theraceID;
 	}
 
 	@Override
 	public String viewRaceDetails(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		return null;
+		return race[raceId];
+		
 	}
 
 	@Override
