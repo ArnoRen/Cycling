@@ -12,15 +12,31 @@ public class Tester {
         
         MiniCyclingPortal portal = new CyclingPortalImpl();
 
-        System.out.println(Arrays.toString(portal.getRaceIds()));
         try {
-            System.out.println(portal.createRace("Porsche","Penske"));
+            System.out.println(portal.createRace("Spa","Belgium"));
         } catch (IllegalNameException e) {
             e.printStackTrace();
         } catch (InvalidNameException e) {
             e.printStackTrace();
         }
 
+        try {
+            System.out.println(portal.createRace("LeMans","France"));
+        } catch (IllegalNameException e) {
+            e.printStackTrace();
+        } catch (InvalidNameException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            System.out.println(portal.createRace("Spa","Belgium"));
+        } catch (IllegalNameException e) {
+            e.printStackTrace();
+        } catch (InvalidNameException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(Arrays.toString(portal.getRaceIds()));
     }
     
 }

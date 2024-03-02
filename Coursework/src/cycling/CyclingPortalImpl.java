@@ -6,10 +6,6 @@ import java.util.List;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Random;
-
-import javax.print.DocFlavor.STRING;
-
 
 /**
  * CyclingPortal is a fully compiling, functioning implementor
@@ -23,11 +19,10 @@ import javax.print.DocFlavor.STRING;
 
 public class CyclingPortalImpl implements CyclingPortal {
 
-	private int[] raceIDsList = new int[10];
 	private ArrayList<List> race = new ArrayList<>();
-	private ArrayList<String> teams = new ArrayList<>();
+	private ArrayList<List> teams = new ArrayList<>();
 	private int theraceID = 0;
-	
+	private int[] raceIDsList = new int[1];
 
 	@Override
 	public int[] getRaceIds() {
@@ -39,16 +34,32 @@ public class CyclingPortalImpl implements CyclingPortal {
 		if (!name.getClass().equals(String.class)||name.equals(null)){
 			throw new InvalidNameException("Name must be String!");
 		};
+		for (int i = 0; i < race.size(); i++) {
+			List currentItem = race.get(i);
+	
+			// Compare currentItem with other items in the list
+			for (int j = i; j < race.size(); j++) {
+				List nextItem = race.get(j);
+	
+				// Compare the current item with the next item
+				if (currentItem.equals(nextItem)) {
+					 throw new IllegalNameException("Race already exists!");
+				}
+			}
+		}
+
 		theraceID++;
 		race.add(Arrays.asList(theraceID,name, description));
-		raceIDsList[theraceID]=theraceID; //PROBLEM
+		int[] updatedRaceIDsList = Arrays.copyOf(raceIDsList, theraceID);
+		updatedRaceIDsList[theraceID - 1] = theraceID;
+		raceIDsList = updatedRaceIDsList;
 		return theraceID;
 	}
 
 	@Override
 	public String viewRaceDetails(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
-		return race[raceId];
+		return null;
 		
 	}
 
