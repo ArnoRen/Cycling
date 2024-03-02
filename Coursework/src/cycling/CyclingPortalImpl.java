@@ -43,7 +43,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	
 				// Compare the current item with the next item
 				if (currentItem.equals(nextItem)) {
-					 throw new IllegalNameException("Race already exists!");
+					 throw new IllegalNameException("Race already exists:" +name);
 				}
 			}
 		}
@@ -60,7 +60,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	public String viewRaceDetails(int raceId) throws IDNotRecognisedException {
 		// Search for the race with the given raceId
 		for (List<Object> raceDetails : race) {
-			int id = (int) raceDetails.get(0); // Assuming race ID is stored at index 0
+			int id = (int) raceDetails.get(0);
 			if (id == raceId) {
 				// Found the race, return its details
 				String name = (String) raceDetails.get(1); // Assuming race name is stored at index 1

@@ -29,18 +29,10 @@ public class Tester {
             e.printStackTrace();
         }
 
-        try {
-            System.out.println(portal.createRace("Spa","Belgium"));
-        } catch (IllegalNameException e) {
-            e.printStackTrace();
-        } catch (InvalidNameException e) {
-            e.printStackTrace();
-        }
-
 
         System.out.println(Arrays.toString(portal.getRaceIds()));
         try {
-            System.out.println(portal.viewRaceDetails(1));
+            System.out.println(portal.viewRaceDetails(2));
         } catch (IDNotRecognisedException e) {
             e.printStackTrace();
         };
