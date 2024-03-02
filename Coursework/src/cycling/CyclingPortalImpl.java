@@ -19,8 +19,8 @@ import java.time.LocalTime;
 
 public class CyclingPortalImpl implements CyclingPortal {
 
-	private ArrayList<List> race = new ArrayList<>();
-	private ArrayList<List> teams = new ArrayList<>();
+	private ArrayList<List<Object>> race = new ArrayList<>();
+	private ArrayList<List<Object>> teams = new ArrayList<>();
 	private int theraceID = 0;
 	private int[] raceIDsList = new int[1];
 
@@ -35,11 +35,11 @@ public class CyclingPortalImpl implements CyclingPortal {
 			throw new InvalidNameException("Name must be String!");
 		};
 		for (int i = 0; i < race.size(); i++) {
-			List currentItem = race.get(i);
+			List<Object> currentItem = race.get(i);
 	
 			// Compare currentItem with other items in the list
 			for (int j = i; j < race.size(); j++) {
-				List nextItem = race.get(j);
+				List<Object> nextItem = race.get(j);
 	
 				// Compare the current item with the next item
 				if (currentItem.equals(nextItem)) {
@@ -58,8 +58,19 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public String viewRaceDetails(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		// Search for the race with the given raceId
+		for (List<Object> raceDetails : race) {
+			int id = (int) raceDetails.get(0); // Assuming race ID is stored at index 0
+			if (id == raceId) {
+				// Found the race, return its details
+				String name = (String) raceDetails.get(1); // Assuming race name is stored at index 1
+				String description = (String) raceDetails.get(2); // Assuming race description is stored at index 2
+				return "Race ID: " + id + "\nName: " + name + "\nDescription: " + description;
+			}
+		}
+		
+		// If raceId is not recognized, throw IDNotRecognisedException
+		throw new IDNotRecognisedException("Race ID not recognized: " + raceId);
 		
 	}
 

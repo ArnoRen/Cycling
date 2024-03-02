@@ -2,6 +2,7 @@ import java.util.Arrays;
 
 import cycling.CyclingPortal;
 import cycling.CyclingPortalImpl;
+import cycling.IDNotRecognisedException;
 import cycling.IllegalNameException;
 import cycling.InvalidNameException;
 import cycling.MiniCyclingPortal;
@@ -36,7 +37,13 @@ public class Tester {
             e.printStackTrace();
         }
 
+
         System.out.println(Arrays.toString(portal.getRaceIds()));
+        try {
+            System.out.println(portal.viewRaceDetails(1));
+        } catch (IDNotRecognisedException e) {
+            e.printStackTrace();
+        };
     }
     
 }
