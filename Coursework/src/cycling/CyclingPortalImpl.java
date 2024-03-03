@@ -11,7 +11,7 @@ import java.time.LocalTime;
  * CyclingPortal is a fully compiling, functioning implementor
  * of the CyclingPortal interface.
  * 
- * @author 730055520 - 730034y5347838
+ * @author 730055520 - 730034y5
  * @version 1.0
  *
  */
