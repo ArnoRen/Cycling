@@ -42,7 +42,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 				List<Object> nextItem = race.get(j);
 	
 				// Compare the current item with the next item
-				if (currentItem.equals(nextItem)) {
+				if (currentItem.equals(nextItem)) {      //ERROR
 					 throw new IllegalNameException("Race already exists:" +name);
 				}
 			}
@@ -76,10 +76,16 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public void removeRaceById(int raceId) throws IDNotRecognisedException {
+		try {
+			race.get(raceId);
+		} catch (Exception e) {
+			throw new IDNotRecognisedException("ID do not exist");
+		}
+
 		for (List<Object> raceDetails : race) {
 			int id = (int) raceDetails.get(0);
 			if (id == raceId) {
-				race.remove(raceId);
+				race.remove(raceId-1);
 			};
 		}
 
@@ -95,10 +101,21 @@ public class CyclingPortalImpl implements CyclingPortal {
 	public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime,
 			StageType type)
 			throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
-
+//	/**
+	 //* Retrieves the list of stage IDs of a race.
+	 //* <p>
+	 //* The state of this MiniCyclingPortal must be unchanged if any
+	 //* exceptions are thrown.
+	 //* 
+	 //* @param raceId The ID of the race being queried.
+	 //* @return An array of stage IDs ordered (from first to last) by their sequence in the
+	 //*         race or an empty array if none exists.
+	 //* @throws IDNotRecognisedException If the ID does not match to any race in the
+	 //*                                  system.
+	 //*/
 	@Override
 	public int[] getRaceStages(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
@@ -181,6 +198,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 		return 0;
 	}
 
+	
+	//Yarım 1/2
 	@Override
 	public void removeRider(int riderId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
