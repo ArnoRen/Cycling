@@ -76,7 +76,12 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public void removeRaceById(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		for (List<Object> raceDetails : race) {
+			int id = (int) raceDetails.get(0);
+			if (id == raceId) {
+				race.remove(raceId);
+			};
+		}
 
 	}
 
