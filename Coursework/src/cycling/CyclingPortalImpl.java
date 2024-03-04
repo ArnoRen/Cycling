@@ -38,7 +38,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 			List<Object> currentItem = race.get(i);
 	
 			// Compare currentItem with other items in the list
-			for (int j = i; j < race.size(); j++) {
+			for (int j = i+1; j < race.size(); j++) {
 				List<Object> nextItem = race.get(j);
 	
 				// Compare the current item with the next item
@@ -92,7 +92,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	}
 
 	@Override
-	public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
+	public int getNumberOfStages( int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
 		return 0;
 	}

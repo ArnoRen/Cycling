@@ -22,13 +22,20 @@ public class Tester {
         }
 
         try {
-            System.out.println(portal.createRace("LeMans","France"));
+            System.out.println(portal.createRace("Istanbulpark","Turkiye"));
         } catch (IllegalNameException e) {
             e.printStackTrace();
         } catch (InvalidNameException e) {
             e.printStackTrace();
         }
 
+        try {
+            System.out.println(portal.createRace("Le Mans","France"));
+        } catch (IllegalNameException e) {
+            e.printStackTrace();
+        } catch (InvalidNameException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(Arrays.toString(portal.getRaceIds()));
         try {
