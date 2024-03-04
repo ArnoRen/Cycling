@@ -30,7 +30,7 @@ public class Tester {
         }
 
         try {
-            System.out.println(portal.createRace("Le Mans","France"));
+            System.out.println(portal.createRace("Le Mans","France (ew) "));
         } catch (IllegalNameException e) {
             e.printStackTrace();
         } catch (InvalidNameException e) {

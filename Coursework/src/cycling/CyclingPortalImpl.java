@@ -21,6 +21,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	private ArrayList<List<Object>> race = new ArrayList<>();
 	private ArrayList<List<Object>> teams = new ArrayList<>();
+	private ArrayList<List<Object>> stage = new ArrayList<>();
 	private int theraceID = 0;
 	private int[] raceIDsList = new int[1];
 
@@ -92,7 +93,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	}
 
 	@Override
-	public int getNumberOfStages( int raceId) throws IDNotRecognisedException {
+	public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
