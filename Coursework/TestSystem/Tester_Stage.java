@@ -16,8 +16,8 @@ public class Tester_Stage {
             System.out.println(portal.getNumberOfStages(2));
         } catch (IDNotRecognisedException e) {
             e.printStackTrace();
-     
-        
-        System.out.println(portal.addStageToRace());
-    
+
+        }
+    }
+}
 

@@ -151,6 +151,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	return uniqueStageID;
 		}
 
+
 	@Override
 	public int[] getRaceStages(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
@@ -224,6 +225,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	
 	@Override
 	public void removeTeam(int teamId) throws IDNotRecognisedException {
+		
 		teams.removeIf(teams -> (int) teams.get(0) == teamId);
 
 		teamIDsList = Arrays.stream(teamIDsList).filter(id -> id != teamId).toArray();
