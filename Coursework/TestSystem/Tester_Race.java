@@ -1,13 +1,12 @@
 import java.util.Arrays;
 
-import cycling.CyclingPortal;
 import cycling.CyclingPortalImpl;
 import cycling.IDNotRecognisedException;
 import cycling.IllegalNameException;
 import cycling.InvalidNameException;
 import cycling.MiniCyclingPortal;
 
-public class Tester {
+public class Tester_Race {
 
     public static void main(String[] args) {
         
@@ -46,7 +45,7 @@ public class Tester {
         }
         
         try {
-            System.out.println(portal.viewRaceDetails(3));
+            System.out.println(portal.viewRaceDetails(2));
         } catch (IDNotRecognisedException e) {
             e.printStackTrace();
         };

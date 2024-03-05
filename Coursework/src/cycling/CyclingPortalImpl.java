@@ -6,7 +6,7 @@ import java.util.List;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Map;
+import java.util.Map; 
 import java.util.HashMap;
 
 
@@ -81,23 +81,11 @@ public class CyclingPortalImpl implements CyclingPortal {
 	@Override
 	public void removeRaceById(int raceId) throws IDNotRecognisedException {
 
-		for (List<Object> raceDetails : race) {
-			int id = (int) raceDetails.get(0);
-			if (id == raceId) {
-				race.remove(raceId-1);
-			};
-		}
+		race.removeIf(race -> (int) race.get(0) == raceId);
 
-		int[] newArray = new int[raceIDsList.length - 1];
-		for (int i = 0, j = 0; i < raceIDsList.length; i++) {
-    		if (i != raceId) {
-        		newArray[j] = raceIDsList[i];
-        	j++;
-    	}
-		raceIDsList = newArray;
+		raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceId).toArray();
 	}
 
-	}
 
     @Override
     public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
@@ -115,14 +103,51 @@ public class CyclingPortalImpl implements CyclingPortal {
         return 0;
     }
 
-	@Override
-	public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime,
-			StageType type)
-			throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
+@Override
+public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime, StageType type)
+        throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
 
-	
-		return 0;
-		}
+    // Check if the race ID exists
+    boolean raceIdExists = false;
+    for (List<Object> raceDetails : race) {
+        int id = (int) raceDetails.get(0);
+        if (id == raceId) {
+			//the unique ID of the stage.
+            raceIdExists = true;
+            break;
+        }
+    }
+	//If the ID does not match to any race in the system.
+    if (!raceIdExists) {
+        throw new IDNotRecognisedException("Race ID not recognized: " + raceId);
+    }
+
+    // Check if the stage name is valid
+    if (stageName == null || stageName.isEmpty() || stageName.length() > 30 || stageName.contains(" ")) {
+        throw new InvalidNameException("Invalid stage name");
+    }
+
+    // Check if the stage name already exists
+    for (List<Object> stageDetails : stage) {
+        String existingStageName = (String) stageDetails.get(1);
+        if (existingStageName.equals(stageName)) {
+            throw new IllegalNameException("Stage name already exists: " + stageName);
+        }
+    }
+
+    // Check if the length is valid
+    if (length < 5) {
+        throw new InvalidLengthException("Invalid stage length: " + length);
+    }
+
+    // Generate a unique ID for the stage
+    int stageId = stage.size() + 1;
+
+    // Create a new stage and add it to the list
+    stage.add(Arrays.asList(raceId, stageId, stageName, description, length, startTime, type));
+
+    return stageId;
+}
 //	/**
 	 //* Retrieves the list of stage IDs of a race.
 	 //* <p>
@@ -188,8 +213,29 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
-		// TODO Auto-generated method stub
-		return 0;
+		if (!name.getClass().equals(String.class)||name.equals(null)){
+			throw new InvalidNameException("Name must be String!");
+		};
+		for (int i = 0; i < teams.size(); i++) {
+			List<Object> currentItem = teams.get(i);
+	
+			// Compare currentItem with other items in the list
+			for (int j = i+1; j < teams.size(); j++) {
+				List<Object> nextItem = teams.get(j);
+	
+				// Compare the current item with the next item
+				if (currentItem.equals(nextItem)) {      //ERROR
+					 throw new IllegalNameException("Team already exists:" +name);
+				}
+			}
+		}
+
+		theraceID++;
+		teams.add(Arrays.asList(theraceID,name, description));
+		int[] updatedRaceIDsList = Arrays.copyOf(raceIDsList, theraceID);
+		updatedRaceIDsList[theraceID - 1] = theraceID;
+		raceIDsList = updatedRaceIDsList;
+		return theraceID;
 	}
 
 	@Override
