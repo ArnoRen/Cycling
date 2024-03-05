@@ -80,19 +80,22 @@ public class CyclingPortalImpl implements CyclingPortal {
 
 	@Override
 	public void removeRaceById(int raceId) throws IDNotRecognisedException {
-		try {
-			race.get(raceId);
-		} catch (Exception e) {
-			throw new IDNotRecognisedException("ID do not exist");
-		}
 
 		for (List<Object> raceDetails : race) {
 			int id = (int) raceDetails.get(0);
 			if (id == raceId) {
 				race.remove(raceId-1);
-				raceIDsList.remove(raceId-1);
 			};
 		}
+
+		int[] newArray = new int[raceIDsList.length - 1];
+		for (int i = 0, j = 0; i < raceIDsList.length; i++) {
+    		if (i != raceId) {
+        		newArray[j] = raceIDsList[i];
+        	j++;
+    	}
+		raceIDsList = newArray;
+	}
 
 	}
 
