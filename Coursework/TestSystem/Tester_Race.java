@@ -29,7 +29,7 @@ public class Tester_Race {
         }
 
         try {
-            System.out.println(portal.createRace("Le Mans","France (ew) "));
+            System.out.println(portal.createRace("Spa","Belgium"));
         } catch (IllegalNameException e) {
             e.printStackTrace();
         } catch (InvalidNameException e) {
@@ -39,7 +39,7 @@ public class Tester_Race {
         System.out.println(Arrays.toString(portal.getRaceIds()));
 
         try {
-            portal.removeRaceById(3);
+            portal.removeRaceById(2);
         } catch (IDNotRecognisedException e) {
             e.printStackTrace();
         }

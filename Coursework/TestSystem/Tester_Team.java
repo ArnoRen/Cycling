@@ -13,7 +13,7 @@ public class Tester_Team {
         MiniCyclingPortal portal = new CyclingPortalImpl();
 
         try {
-            System.out.println(portal.createTeam("Spa","Belgium"));
+            System.out.println(portal.createTeam("Porsche Peniske","Porsche 963"));
         } catch (IllegalNameException e) {
             e.printStackTrace();
         } catch (InvalidNameException e) {
@@ -21,7 +21,7 @@ public class Tester_Team {
         }
 
         try {
-            System.out.println(portal.createTeam("Istanbulpark","Turkiye"));
+            System.out.println(portal.createTeam("AF Course","499P"));
         } catch (IllegalNameException e) {
             e.printStackTrace();
         } catch (InvalidNameException e) {
@@ -29,28 +29,22 @@ public class Tester_Team {
         }
 
         try {
-            System.out.println(portal.createTeam("Le Mans","France (ew) "));
+            System.out.println(portal.createTeam("AF Course","499P"));
         } catch (IllegalNameException e) {
             e.printStackTrace();
         } catch (InvalidNameException e) {
             e.printStackTrace();
         }
 
-        System.out.println(Arrays.toString(portal.getRaceIds()));
+        System.out.println(Arrays.toString(portal.getTeams()));
 
         try {
-            portal.removeRaceById(3);
+            portal.removeTeam(2);
         } catch (IDNotRecognisedException e) {
             e.printStackTrace();
         }
-        
-        try {
-            System.out.println(portal.viewRaceDetails(2));
-        } catch (IDNotRecognisedException e) {
-            e.printStackTrace();
-        };
 
-        System.out.println(Arrays.toString(portal.getRaceIds()));
+        System.out.println(Arrays.toString(portal.getTeams()));
     }
     
 }

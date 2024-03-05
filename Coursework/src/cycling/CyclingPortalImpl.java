@@ -38,17 +38,10 @@ public class CyclingPortalImpl implements CyclingPortal {
 		if (!name.getClass().equals(String.class)||name.equals(null)){
 			throw new InvalidNameException("Name must be String!");
 		};
-		for (int i = 0; i < race.size(); i++) {
-			List<Object> currentItem = race.get(i);
-	
-			// Compare currentItem with other items in the list
-			for (int j = i+1; j < race.size(); j++) {
-				List<Object> nextItem = race.get(j);
-	
-				// Compare the current item with the next item
-				if (currentItem.equals(nextItem)) {      //ERROR
-					 throw new IllegalNameException("Race already exists:" +name);
-				}
+		for (List<Object> raceDetails : race) {
+			String existingName = (String) raceDetails.get(1); 
+			if (existingName.equals(name)) {
+				throw new IllegalNameException("Team already exists: " + name);
 			}
 		}
 
@@ -142,26 +135,22 @@ public int addStageToRace(int raceId, String stageName, String description, doub
         throw new InvalidLengthException("Invalid stage length: " + length);
     }
 
-    // Generate a unique ID for the stage
-    int stageId = stage.size() + 1;
-
+    // @return the unique ID of the stage.
+	// return the unique ID to the stage after the new stage added to the list
     // Create a new stage and add it to the list
-    stage.add(Arrays.asList(raceId, stageId, stageName, description, length, startTime, type));
 
-    return stageId;
-}
-//	/**
-	 //* Retrieves the list of stage IDs of a race.
-	 //* <p>
-	 //* The state of this MiniCyclingPortal must be unchanged if any
-	 //* exceptions are thrown.
-	 //* 
-	 //* @param raceId The ID of the race being queried.
-	 //* @return An array of stage IDs ordered (from first to last) by their sequence in the
-	 //*         race or an empty array if none exists.
-	 //* @throws IDNotRecognisedException If the ID does not match to any race in the
-	 //*                                  system.
-	 //*/
+	// @return the unique ID of the stage.
+	// Return the unique ID of the stage after the new stage is added to the list
+	// Create a new stage and add it to the list
+	int uniqueStageID = stage.size() + 1; //+1 is used to generate a unique identifier in this stage
+
+	// Add the new stage to the list
+	stage.add(Arrays.asList(raceId, uniqueStageID, stageName, description, length, startTime, type));
+
+	// Return the unique ID of the stage
+	return uniqueStageID;
+		}
+
 	@Override
 	public int[] getRaceStages(int raceId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
@@ -218,17 +207,10 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 		if (!name.getClass().equals(String.class)||name.equals(null)){
 			throw new InvalidNameException("Name must be String!");
 		};
-		for (int i = 0; i < teams.size(); i++) {
-			List<Object> currentItem = teams.get(i);
-	
-			// Compare currentItem with other items in the list
-			for (int j = i+1; j < teams.size(); j++) {
-				List<Object> nextItem = teams.get(j);
-	
-				// Compare the current item with the next item
-				if (currentItem.equals(nextItem)) {      //ERROR
-					 throw new IllegalNameException("Team already exists:" +name);
-				}
+		for (List<Object> teamDetails : teams) {
+			String existingName = (String) teamDetails.get(1); // Assuming name is stored at index 1
+			if (existingName.equals(name)) {
+				throw new IllegalNameException("Team already exists: " + name);
 			}
 		}
 
@@ -239,10 +221,12 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 		teamIDsList = updatedteamIDsList;
 		return theteamID;
 	}
-
+	
 	@Override
 	public void removeTeam(int teamId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		teams.removeIf(teams -> (int) teams.get(0) == teamId);
+
+		teamIDsList = Arrays.stream(teamIDsList).filter(id -> id != teamId).toArray();
 
 	}
 
