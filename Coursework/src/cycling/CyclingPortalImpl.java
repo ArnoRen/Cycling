@@ -6,6 +6,9 @@ import java.util.List;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Map;
+import java.util.HashMap;
+
 
 /**
  * CyclingPortal is a fully compiling, functioning implementor
@@ -87,16 +90,27 @@ public class CyclingPortalImpl implements CyclingPortal {
 			int id = (int) raceDetails.get(0);
 			if (id == raceId) {
 				race.remove(raceId-1);
+				raceIDsList.remove(raceId-1);
 			};
 		}
 
 	}
 
-	@Override
-	public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
+        for (List<Object> raceDetails : race) {
+            int id = (int) raceDetails.get(0);
+
+            // Check if the ID is recognized; if it is, throw an exception
+            if (id == raceId) {
+                throw new IDNotRecognisedException("Race ID not recognized: " + raceId);
+            }
+			//stage.add(Arrays.asList(raceId, stageName, description, length, startTime));
+			return theraceID;
+        }
+
+        return 0;
+    }
 
 	@Override
 	public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime,

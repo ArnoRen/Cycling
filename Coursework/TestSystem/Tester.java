@@ -38,11 +38,20 @@ public class Tester {
         }
 
         System.out.println(Arrays.toString(portal.getRaceIds()));
+
         try {
-            System.out.println(portal.viewRaceDetails(2));
+            portal.removeRaceById(3);
+        } catch (IDNotRecognisedException e) {
+            e.printStackTrace();
+        }
+        
+        try {
+            System.out.println(portal.viewRaceDetails(3));
         } catch (IDNotRecognisedException e) {
             e.printStackTrace();
         };
+
+        System.out.println(Arrays.toString(portal.getRaceIds()));
     }
     
 }
