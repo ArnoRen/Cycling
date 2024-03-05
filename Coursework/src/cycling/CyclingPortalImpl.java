@@ -6,8 +6,6 @@ import java.util.List;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Map; 
-import java.util.HashMap;
 
 
 /**
@@ -27,6 +25,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private ArrayList<List<Object>> stage = new ArrayList<>();
 	private int theraceID = 0;
 	private int[] raceIDsList = new int[1];
+	private int theteamID = 0;
+	private int[] teamIDsList = new int[1];
 
 	@Override
 	public int[] getRaceIds() {
@@ -123,17 +123,19 @@ public int addStageToRace(int raceId, String stageName, String description, doub
     }
 
     // Check if the stage name is valid
+	//an identifier name for the stage
+	//@throws InvalidNameException if the name is null, empty, has more than 30 characters, or has white spaces
+	//@throws InvalidLengthException   If the length is less than 5km.
     if (stageName == null || stageName.isEmpty() || stageName.length() > 30 || stageName.contains(" ")) {
         throw new InvalidNameException("Invalid stage name");
-    }
+    } 
 
-    // Check if the stage name already exists
-    for (List<Object> stageDetails : stage) {
-        String existingStageName = (String) stageDetails.get(1);
-        if (existingStageName.equals(stageName)) {
-            throw new IllegalNameException("Stage name already exists: " + stageName);
-        }
-    }
+
+    // stage name exist?
+	//throw illegalnameexception if the name already exist in the platorm
+	if (stage.stream().anyMatch(stageDetails -> ((String) stageDetails.get(1)).equals(stageName))) {
+    	throw new IllegalNameException("A stage name already exists in the platform: " + stageName);
+	}
 
     // Check if the length is valid
     if (length < 5) {
@@ -230,12 +232,12 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 			}
 		}
 
-		theraceID++;
-		teams.add(Arrays.asList(theraceID,name, description));
-		int[] updatedRaceIDsList = Arrays.copyOf(raceIDsList, theraceID);
-		updatedRaceIDsList[theraceID - 1] = theraceID;
-		raceIDsList = updatedRaceIDsList;
-		return theraceID;
+		theteamID++;
+		teams.add(Arrays.asList(theteamID,name, description));
+		int[] updatedteamIDsList = Arrays.copyOf(teamIDsList, theteamID);
+		updatedteamIDsList[theteamID - 1] = theteamID;
+		teamIDsList = updatedteamIDsList;
+		return theteamID;
 	}
 
 	@Override
@@ -246,8 +248,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public int[] getTeams() {
-		// TODO Auto-generated method stub
-		return null;
+		return teamIDsList;
 	}
 
 	@Override

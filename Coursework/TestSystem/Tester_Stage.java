@@ -13,7 +13,7 @@ import cycling.MiniCyclingPortal;
  * @author Diogo Pacheco
  * @version 2.0
  */
-public class CyclingPortalTestApp {
+public class Tester_Stage {
 
 	/**
 	 * Test method.
