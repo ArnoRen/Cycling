@@ -13,7 +13,7 @@ public class Tester_Team {
         MiniCyclingPortal portal = new CyclingPortalImpl();
 
         try {
-            System.out.println(portal.createTeam("Porsche Peniske","Porsche 963"));
+            System.out.println(portal.createTeam("Porsche Penske","Porsche 963"));
         } catch (IllegalNameException e) {
             e.printStackTrace();
         } catch (InvalidNameException e) {
