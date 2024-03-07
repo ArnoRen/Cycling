@@ -27,6 +27,9 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private int[] raceIDsList = new int[1];
 	private int theteamID = 0;
 	private int[] teamIDsList = new int[1];
+	private int raceStageId = 0;
+	private int[] raceStageIdList = new int[1];
+	private Map<Integer, Double> stageLengths; //stores lenght internally 
 
 	@Override
 	public int[] getRaceIds() {
@@ -80,21 +83,22 @@ public class CyclingPortalImpl implements CyclingPortal {
 	}
 
 
-    @Override
-    public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
-        for (List<Object> raceDetails : race) {
-            int id = (int) raceDetails.get(0);
-
-            // Check if the ID is recognized; if it is, throw an exception
-            if (id == raceId) {
-                throw new IDNotRecognisedException("Race ID not recognized: " + raceId);
-            }
-			//stage.add(Arrays.asList(raceId, stageName, description, length, startTime));
-			return theraceID;
-        }
-
-        return 0;
-    }
+	@Override
+	public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
+		// check if the provided raceId exists in the system using stream().noneMatch()
+		//noneMatch() of Stream class returns whether no elements of this stream match the provided predicate.
+		//stream(): This method is called on a collection, converting it into a Stream. A Stream is a sequence of elements that supports various operations.
+		//filter(): This method is an intermediate operation that takes a Predicate (a functional interface representing a boolean-valued function) as an argument. 
+		//It filters the elements of the stream based on whether they satisfy the given predicate. Only elements that match the predicate will be included in the resulting stream.
+		//count(): This method is a terminal operation that returns the count of elements in the stream. 
+		if (race.stream().noneMatch(raceDetails -> (int) raceDetails.get(0) == raceId)) {
+			// If the race ID is not recognized, throw IDNotRecognisedException. 
+			throw new IDNotRecognisedException("Race ID not recognized: " + raceId);
+		}
+	//Otherwise, it counts the number of stages associated with the specified raceId using stream().filter().count().
+	//stream().filter().count() method used to count the number of stages associated with a specific race ID.
+		return (int) stage.stream().filter(stageDetails -> (int) stageDetails.get(0) == raceId).count();
+	}
 
 @Override
 public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime, StageType type)
@@ -154,16 +158,33 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public int[] getRaceStages(int raceId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		//check if the raceID exist in the system -as always
+		if (race.stream().noneMatch(raceDetails -> (int) raceDetails.get(0) == raceId)) {
+			//if not throw IDNotRecognisedException
+			throw new IDNotRecognisedException("Race ID not recognized: " + raceId);
+		}
+		return raceStageId;
+	}	
 
 	@Override
+	// Gets the length of a stage in a race, in kilometres.
+	//@param stageId The ID of the stage being queried.
+	// return stages lenght
 	public double getStageLength(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+		//stage ID exist? 
+		if (stageLengths.containsKey(stageId)) { //The java.util.Map.containsKey() method is used to check whether a particular key is being mapped into the Map or not
+            // Return the length of the stage
+            return stageLengths.get(stageId);
+        } else {
+            // Throw an exception if the stageId is not recognized
+            throw new IDNotRecognisedException("Stage ID not recognized: " + stageId);
+        }
+    }
+	// Map is a way to keep track of information in the form of key-value pairs. 
+	//In Java, a map can consist of virtually any number of key-value pairs, 
+	//but the keys must always be unique — non-repeating.
 
+	//??????????????????????????????
 	@Override
 	public void removeStageById(int stageId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
