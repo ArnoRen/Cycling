@@ -6,7 +6,7 @@ import cycling.IllegalNameException;
 import cycling.InvalidNameException;
 import cycling.MiniCyclingPortal;
 
-public class Tester_Team {
+public class Tester_Riders {
 
     public static void main(String[] args) {
         
