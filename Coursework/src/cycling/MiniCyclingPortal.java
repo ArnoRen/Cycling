@@ -119,6 +119,9 @@ public interface MiniCyclingPortal extends Serializable {
 	 *                                  system.
 	 */
 	int[] getRaceStages(int raceId) throws IDNotRecognisedException;
+	
+	
+	
 
 	/**
 	 * Gets the length of a stage in a race, in kilometres.
