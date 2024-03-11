@@ -180,13 +180,20 @@ public int addStageToRace(int raceId, String stageName, String description, doub
             throw new IDNotRecognisedException("Stage ID not recognized: " + stageId);
         }
     }
-	// Map is a way to keep track of information in the form of key-value pairs. 
+	//Map is a way to keep track of information in the form of key-value pairs. 
 	//In Java, a map can consist of virtually any number of key-value pairs, 
 	//but the keys must always be unique — non-repeating.
 
 	//??????????????????????????????
 	@Override
 	public void removeStageById(int stageId) throws IDNotRecognisedException {
+		/*
+		 * race.removeIf(race -> (int) race.get(0) == raceId);
+
+			raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceId).toArray();
+		 * 
+		 * Race den kaldırma böyle, 2. de race id listten kaldırıyor
+		 */
 		// TODO Auto-generated method stub
 
 	}
@@ -286,6 +293,16 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 		// TODO Auto-generated method stub
 
 	}
+
+/* GET
+ * for (List<Object> teamDetails : teams) {                      HANGİ LİSTEDE ARIYORSAN O
+			String existingName = (String) teamDetails.get(1);   LİSTEDE ARADIĞIN ITEM KAÇINCI SIRADA (ID 0'DA MESELA İSE O NUMBER) 
+			if (existingName.equals(name))                       EĞER STRING ISE BU ŞEKİLDE ARADIĞIN O MU DİYE KONTROL EDİYOR, TRUE ISE IF İN ALTI
+ * 
+ * DURUMA BAĞLI FOR İÇİNDE FOR DÖNGÜSÜ YAPIP O FOR DÖNGÜSÜNÜN İÇİNE DE GET KOYUP LİSTENİN İÇİNDEKİ LİSTEDEN BİR ŞEY ALABİLİRSİN
+ * 
+ * BUNLARIN HEPSİNİ FOR DÖNGÜSÜ İÇİNDE HER TAKIM İÇİN YAPARSAN HER RIDER IN BİLGİSİNİ ALABİLİRSİN
+ */
 
 	@Override
 	public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
