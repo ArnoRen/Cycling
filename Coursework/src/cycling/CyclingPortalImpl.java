@@ -3,6 +3,7 @@ package cycling;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -27,8 +28,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private int[] raceIDsList = new int[1];
 	private int theteamID = 0;
 	private int[] teamIDsList = new int[1];
-	private int raceStageId = 0;
-	private int[] raceStageIdList = new int[1];
+	//private int raceStageId = 0;
+	//private int[] raceStageIdList = new int[1];
 	private Map<Integer, Double> stageLengths; //stores lenght internally 
 
 	@Override
@@ -98,6 +99,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	//Otherwise, it counts the number of stages associated with the specified raceId using stream().filter().count().
 	//stream().filter().count() method used to count the number of stages associated with a specific race ID.
 		return (int) stage.stream().filter(stageDetails -> (int) stageDetails.get(0) == raceId).count();
+		//lambda expression (parameter -> expression) == taking a parameter and returning to a value. 
 	}
 
 @Override
@@ -163,8 +165,20 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 			//if not throw IDNotRecognisedException
 			throw new IDNotRecognisedException("Race ID not recognized: " + raceId);
 		}
-		return raceStageId;
-	}	
+		// Use an ArrayList to store the stage IDs
+    	List<Integer> raceStageIdList = new ArrayList<>();
+		for (List<Object> stageDetails : stage) {
+        	int stageRaceId = (int) stageDetails.get(0); // Assuming race ID is at index 0
+        	if (stageRaceId == raceId) {
+            	raceStageIdList.add((int) stageDetails.get(1)); // Assuming stage ID is at index 1
+        	}
+    	}
+
+    	// Convert the ArrayList to an array
+    	int[] raceStageId = raceStageIdList.stream().mapToInt(Integer::intValue).toArray();
+
+    	return raceStageId;
+	}
 
 	@Override
 	// Gets the length of a stage in a race, in kilometres.
@@ -202,7 +216,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	public int addCategorizedClimbToStage(int stageId, Double location, CheckpointType type, Double averageGradient,
 			Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException,
 			InvalidStageTypeException {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 
