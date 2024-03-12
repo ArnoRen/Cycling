@@ -216,10 +216,47 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	public int addCategorizedClimbToStage(int stageId, Double location, CheckpointType type, Double averageGradient,
 			Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException,
 			InvalidStageTypeException {
-		
-		return 0;
-	}
+	
+		// Check if the race ID exists
+    	boolean raceStageIdBool = false;
+    	for (List<Object> raceStageIdList : race) {
+        	int id = (int) raceStageIdList.get(0);
+        	if (id == stageId) {
+			//the unique ID of the stage.
+            raceStageIdBool = true;
+            break;
+        	}
+    	}
+		//If the ID does not match to any race in the system.
+    	if (!raceStageIdBool) {
+        	throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
+    	}
 
+		 List<List<Object>> originalRace = new ArrayList<>(race)
+		
+		//@throws InvalidStageTypeException  Time-trial stages cannot contain any checkpoint. ---check if the stage type is not time-trial
+        for (List<Object> stage : race) {
+            int id = (int) stage.get(0);
+            String stageType = (String) stage.get(2);
+            if (id == stageId && stageType.equals("time-trial")) {
+                throw new InvalidStageTypeException("Time-trial stages cannot contain any checkpoint");
+            }
+        }
+		//@throws InvalidLocationException   If the location is out of bounds of the stage length.  Check if the location is within the bounds of the stage length
+        if (location < 0 || location > length) {
+            throw new InvalidLocationException("Location is out of bounds of the stage length");
+        }
+
+		//  @throws InvalidStageStateException If the stage is "waiting for results". Check if the stage is not in "waiting for results" state
+        for (List<Object> stage : race) {
+            int id = (int) stage.get(0);
+            String state = (String) stage.get(1);
+            if (id == stageId && state.equals("waiting for results")) {
+                throw new InvalidStageStateException("Stage is in 'waiting for results' state");
+            }
+        }
+
+	
 	@Override
 	public int addIntermediateSprintToStage(int stageId, double location) throws IDNotRecognisedException,
 			InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
