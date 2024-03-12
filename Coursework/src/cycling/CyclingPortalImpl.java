@@ -29,8 +29,10 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private int theteamID = 0;
 	private int[] teamIDsList = new int[1];
 	//private int raceStageId = 0;
-	//private int[] raceStageIdList = new int[1];
-	private Map<Integer, Double> stageLengths; //stores lenght internally 
+	private int[] raceStageIdList = new int[1];
+	private int[] raceStageIdArray;
+	private Map<Integer, Double> stageLengths; //stores lenght internally
+	 
 
 	@Override
 	public int[] getRaceIds() {
@@ -223,7 +225,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
         	int id = (int) raceStageIdList.get(0);
         	if (id == stageId) {
 			//the unique ID of the stage.
-            raceStageIdBool = true;
+            raceStageIdBool = true;	
             break;
         	}
     	}
@@ -232,7 +234,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
         	throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
     	}
 
-		 List<List<Object>> originalRace = new ArrayList<>(race)
+		 List<List<Object>> originalRace = new ArrayList<>(race);
 		
 		//@throws InvalidStageTypeException  Time-trial stages cannot contain any checkpoint. ---check if the stage type is not time-trial
         for (List<Object> stage : race) {
@@ -247,14 +249,27 @@ public int addStageToRace(int raceId, String stageName, String description, doub
             throw new InvalidLocationException("Location is out of bounds of the stage length");
         }
 
-		//  @throws InvalidStageStateException If the stage is "waiting for results". Check if the stage is not in "waiting for results" state
+		// @throws InvalidStageStateException If the stage is "waiting for results". Check if the stage is not in "waiting for results" state
         for (List<Object> stage : race) {
             int id = (int) stage.get(0);
             String state = (String) stage.get(1);
             if (id == stageId && state.equals("waiting for results")) {
                 throw new InvalidStageStateException("Stage is in 'waiting for results' state");
             }
-        }
+		}
+		//@param stageId - The ID of the stage to which the climb checkpoint is being added.
+		
+	stageId++; // Incrementing the stageId after using it
+	raceStageIdList.add(stageId); // Adding the stageId to the list of stage IDs
+
+	int[] updatedRaceStageIdArray = Arrays.copyOf(raceStageIdArray, stageId);
+	updatedRaceStageIdArray[stageId - 1] = stageId;
+	raceStageIdArray = updatedRaceStageIdArray;
+
+
+
+		
+    
 
 	
 	@Override
@@ -325,7 +340,17 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	@Override
 	public int createRider(int teamID, String name, int yearOfBirth)
 			throws IDNotRecognisedException, IllegalArgumentException {
-		// TODO Auto-generated method stub
+		if (!name.getClass().equals(String.class)||name.equals(null)){
+			throw new InvalidNameException("Name must be String!");
+		};
+		for (List<Object> riderDetails : teams) {
+			String existingName = (String) riderDetails.get(3); 
+			if (existingName.equals(name)) {
+				throw new IllegalNameException("Rider already exists: " + name);
+			}
+		}
+		theraceID++;
+		teams.add(Arrays.asList(theraceID,name, yearOfBirth));
 		return 0;
 	}
 
