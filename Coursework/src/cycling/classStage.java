@@ -5,7 +5,7 @@ public class Stage{
   private double length;
   private double location;
 
-  public Stage(String Name, double Length, int StageID, String Type, int RaceID, double Location, int CheckpointID, String Description, LocalDateTime startTime){
+  public Stage(String Name, double Length, int StageID, String Type, int RaceID, double Location, int CheckpointID, String Description, LocalDateTime startTime, StageType type, CheckpointType type, Double averageGradient){
     name = Name; 
     length = Length;
     StageId = StageID;
@@ -15,6 +15,7 @@ public class Stage{
     checkpointID = CheckpointID;
     description = Description;
     startt-Time = startTime;
+    averageGradient = averageGradient
   }
 
   public String getStageName(){
@@ -46,6 +47,15 @@ public class Stage{
   }
   public LocalDateTime startTime(){
     return startTime;
+  }
+  public StageType type(){
+    return type; 
+  }
+  public CheckpointType type(){
+    return type;
+  }
+  public Double averageGradient(){
+    return averageGradient;
   }
 }
   
