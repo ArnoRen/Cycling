@@ -258,30 +258,84 @@ public int addStageToRace(int raceId, String stageName, String description, doub
             }
 		}
 		//@param stageId - The ID of the stage to which the climb checkpoint is being added.
-		
 	stageId++; // Incrementing the stageId after using it
-	raceStageIdList.add(stageId); // Adding the stageId to the list of stage IDs
+	teams.add(Arrays.asList(stageId,name, description)); // Adding the stageId to the list of stage IDs
 
 	int[] updatedRaceStageIdArray = Arrays.copyOf(raceStageIdArray, stageId);
 	updatedRaceStageIdArray[stageId - 1] = stageId;
 	raceStageIdArray = updatedRaceStageIdArray;
+	return stageId;
+		}
+	// @param location The kilometre location where the climb finishes within the stage.
 
-
-
-		
-    
 
 	
 	@Override
 	public int addIntermediateSprintToStage(int stageId, double location) throws IDNotRecognisedException,
 			InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
-		// TODO Auto-generated method stub
-		return 0;
+		// Check if the race ID exists
+    	boolean raceStageIdBool = false;
+    	for (List<Object> raceStageIdList : race) {
+        	int id = (int) raceStageIdList.get(0);
+        	if (id == stageId) {
+		//the unique ID of the stage.
+            	raceStageIdBool = true;	
+            	break;
+        	}
+    	}
+	//If the ID does not match to any race in the system.
+    	if (!raceStageIdBool) {
+        	throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
+    	}
+
+	List<List<Object>> originalRace = new ArrayList<>(race);
+		
+	//@throws InvalidStageTypeException  Time-trial stages cannot contain any checkpoint. ---check if the stage type is not time-trial
+        for (List<Object> stage : race) {
+            int id = (int) stage.get(0);
+            String stageType = (String) stage.get(2);
+            if (id == stageId && stageType.equals("time-trial")) {
+                throw new InvalidStageTypeException("Time-trial stages cannot contain any checkpoint");
+            }
+        }
+		//@throws InvalidLocationException   If the location is out of bounds of the stage length.  Check if the location is within the bounds of the stage length
+        if (location < 0 || location > length) {
+            throw new InvalidLocationException("Location is out of bounds of the stage length");
+        }
+
+	// @throws InvalidStageStateException If the stage is "waiting for results". Check if the stage is not in "waiting for results" state
+        for (List<Object> stage : race) {
+            int id = (int) stage.get(0);
+            String state = (String) stage.get(1);
+            if (id == stageId && state.equals("waiting for results")) {
+                throw new InvalidStageStateException("Stage is in 'waiting for results' state");
+            }
+	}
+	public class SprintCheckpointManager {
+		// Assuming a map to store checkpoint IDs against stage IDs
+		private Map<Integer, Integer> checkpointMap;
+		public SprintCheckpointManager() {
+			checkpointMap = new HashMap<>();
+		}
+		public int addIntermediateSprintCheckpoint(int stageId, int location) {
+			// Generate a unique checkpoint ID (you can use any suitable logic)
+			int checkpointId = generateCheckpointId();
+		
+			// Store the checkpoint ID against the stage ID
+			checkpointMap.put(stageId, checkpointId);
+		
+			// Perform any additional operations as required (e.g., store location information)
+		
+			// Return the ID of the created checkpoint
+			return checkpointId;
+		}
 	}
 
 	@Override
 	public void removeCheckpoint(int checkpointId) throws IDNotRecognisedException, InvalidStageStateException {
-		// TODO Auto-generated method stub
+		Checkpoint.removeIf(Checkpoint -> (int) Checkpoint.get(0) == checkpointId);
+
+		checkpointIdList = Arrays.stream(checkpointIdList).filter(id -> id != checkpointId).toArray();
 
 	}
 
