@@ -330,6 +330,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 			return checkpointId;
 		}
 	}
+	}
 
 	@Override
 	public void removeCheckpoint(int checkpointId) throws IDNotRecognisedException, InvalidStageStateException {
