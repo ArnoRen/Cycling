@@ -396,12 +396,12 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	public int createRider(int teamID, String name, int yearOfBirth)
 			throws IDNotRecognisedException, IllegalArgumentException {
 		if (!name.getClass().equals(String.class)||name.equals(null)){
-			throw new InvalidNameException("Name must be String!");
+			throw new IDNotRecognisedException("Name must be String!");
 		};
 		for (List<Object> riderDetails : teams) {
-			String existingName = (String) riderDetails.get(3); 
+			String existingName = (String) riderDetails.get(1); 
 			if (existingName.equals(name)) {
-				throw new IllegalNameException("Rider already exists: " + name);
+				throw new IllegalArgumentException("Rider already exists: " + name);
 			}
 		}
 		theraceID++;
