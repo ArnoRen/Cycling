@@ -1,67 +1,76 @@
 package cycling;
-import java.time.*;
+import java.time.LocalDateTime;
 
-
-
-public class classStage(String Name, double Length, int StageID, String Type, int RaceID, double Location, int CheckpointID, String Description, LocalDateTime startTime, StageType type, CheckpointType type, Double averageGradient){
+public class classStage {
     
-  String name = Name; 
-  double length = Length;
-  int StageId = StageID;
-  String type = Type;
-  int raceID = RaceID;
-  double location = Location;
-  int checkpointID = CheckpointID;
-  String description = Description;
-  LocalDateTime StartTime = startTime;
-  double AverageGradient = averageGradient;
+  private String name;
+  private double length;
+  private int stageID;
+  private int raceID;
+  private double location;
+  private int checkpointID;
+  private String description;
+  private LocalDateTime startTime;
+  private StageType stageType;
+  private CheckpointType checkpointType;
+  private Double averageGradient;
 
-  public String getStageName(){
-    String name;
+  public classStage(String name, double length, int stageID, int raceID, double location, int checkpointID, String description, LocalDateTime startTime, StageType stageType, CheckpointType checkpointType, Double averageGradient) {
+    this.name = name; 
+    this.length = length;
+    this.stageID = stageID;
+    this.stageType = stageType;
+    this.raceID = raceID;
+    this.location = location;
+    this.checkpointID = checkpointID;
+    this.description = description;
+    this.startTime = startTime;
+    this.stageType = stageType;
+    this.checkpointType = checkpointType;
+    this.averageGradient = averageGradient;
+  }
+
+  public String getStageName() {
     return name; 
   }
 
-  public double getLenght(){
-    double lenght;
-    return lenght;
+  public double getLength() {
+    return length;
   }
 
-  public String getType(){
-    return type;
-  }
-
-  public int getStageID(){
+  public int getStageID() {
     return stageID;
   }
-  public String getDescription(){
-    String description;
+
+  public String getDescription() {
     return description;
   }
-  public int getRaceID(){
-    int raceID;
+
+  public int getRaceID() {
     return raceID;
   }
-  public double getLocation(){
+
+  public double getLocation() {
     return location;
   }
-  public int getCheckpointID(){
+
+  public int getCheckpointID() {
     return checkpointID;
   }
-  public LocalDateTime startTime(){
-    LocalDateTime startTime;
+
+  public LocalDateTime getStartTime() {
     return startTime;
   }
-  
-  public StageType type(){
-    return type; 
+
+  public StageType getStageType() {
+    return stageType;
   }
-  public CheckpointType type(){
-    return type;
+
+  public CheckpointType getCheckpointTypeEnum() {
+    return checkpointType;
   }
-  public Double averageGradient(){
-    return AverageGradient;
+
+  public Double getAverageGradient() {
+    return averageGradient;
   }
 }
-
-  
-    
