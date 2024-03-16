@@ -365,7 +365,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 		}
 
 		theteamID++;
-		teams.add(Arrays.asList(theteamID,name, description));
+		teams.add(Arrays.asList(theteamID, name, description));
 		int[] updatedteamIDsList = Arrays.copyOf(teamIDsList, theteamID);
 		updatedteamIDsList[theteamID - 1] = theteamID;
 		teamIDsList = updatedteamIDsList;
@@ -405,6 +405,12 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 			}
 		}
 		theraceID++;
+		for (List<Object> riderDetails : teams) {
+			String existingName = (String) riderDetails.get(1); 
+			if (existingName.equals(name)) {
+				throw new IllegalArgumentException("Rider already exists: " + name);
+			}
+		}
 		teams.add(Arrays.asList(theraceID,name, yearOfBirth));
 		return 0;
 	}
@@ -413,6 +419,11 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	//Yarım 1/2
 	@Override
 	public void removeRider(int riderId) throws IDNotRecognisedException {
+		/*
+		 * race.removeIf(race -> (int) race.get(0) == raceId);
+
+			raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceId).toArray();
+		 */
 		// TODO Auto-generated method stub
 
 	}
