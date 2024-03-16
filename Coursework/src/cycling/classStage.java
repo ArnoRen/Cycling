@@ -15,19 +15,19 @@ public class Stage{
     checkpointID = CheckpointID;
     description = Description;
     startt-Time = startTime;
-    averageGradient = averageGradient
+    averageGradient = averageGradient;
   }
 
   public String getStageName(){
-    return name 
+    return name; 
   }
 
   public double getLenght(){
-    return lenght 
+    return lenght ;
   }
 
   public String getType(){
-    return type 
+    return type;
   }
 
   public int getStageID(){
