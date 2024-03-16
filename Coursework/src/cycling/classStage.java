@@ -1,25 +1,20 @@
 package cycling;
 import java.time.*;
 
-public class classStage{
-  private int stageID;
-  private String type;
-  private int checkpointID;
-  private double length;
-  private double location;
 
-  public classStage(String Name, double Length, int StageID, String Type, int RaceID, double Location, int CheckpointID, String Description, LocalDateTime startTime, StageType type, CheckpointType type, Double averageGradient){
-    String name = Name; 
-    double length = Length;
-    int StageId = StageID;
-    String type = Type;
-    int raceID = RaceID;
-    double location = Location;
-    int checkpointID = CheckpointID;
-    String description = Description;
-    LocalDateTime StartTime = startTime;
-    double averageGradient = averageGradient;
-  }
+
+public class classStage(String Name, double Length, int StageID, String Type, int RaceID, double Location, int CheckpointID, String Description, LocalDateTime startTime, StageType type, CheckpointType type, Double averageGradient){
+    
+  String name = Name; 
+  double length = Length;
+  int StageId = StageID;
+  String type = Type;
+  int raceID = RaceID;
+  double location = Location;
+  int checkpointID = CheckpointID;
+  String description = Description;
+  LocalDateTime StartTime = startTime;
+  double AverageGradient = averageGradient;
 
   public String getStageName(){
     String name;
@@ -28,7 +23,7 @@ public class classStage{
 
   public double getLenght(){
     double lenght;
-    return lenght ;
+    return lenght;
   }
 
   public String getType(){
@@ -64,8 +59,9 @@ public class classStage{
     return type;
   }
   public Double averageGradient(){
-    return averageGradient;
+    return AverageGradient;
   }
 }
+
   
     
