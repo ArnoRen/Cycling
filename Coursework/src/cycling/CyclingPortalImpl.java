@@ -391,9 +391,8 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public int[] getTeamRiders(int teamId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		// teamIDsList = Arrays.stream(teamIDsList).filter(id -> id != teamId).toArray();
-		return null;
+		int[] getriderIDList = Arrays.stream(riderIDList).filter(id -> id == teamId).toArray();
+		return getriderIDList;
 	}
 
 	@Override
@@ -426,13 +425,10 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	//Yarım 1/2
 	@Override
 	public void removeRider(int riderId) throws IDNotRecognisedException {
-		/*
-		 * race.removeIf(race -> (int) race.get(0) == raceId);
 
-			raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceId).toArray();
-		 */
-		// TODO Auto-generated method stub
+		riders.removeIf(riders -> (int) riders.get(0) == riderId);
 
+		riderIDList = Arrays.stream(riderIDList).filter(id -> id != riderId).toArray();
 	}
 
 	@Override
@@ -515,7 +511,9 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public void removeRaceByName(String name) throws NameNotRecognisedException {
-		// TODO Auto-generated method stub
+		race.removeIf(race -> (String) race.get(1) == name);
+
+		raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceId).toArray();
 
 	}
 
