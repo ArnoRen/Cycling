@@ -31,6 +31,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 	//private int raceStageId = 0;
 	private int[] raceStageIdList = new int[1];
 	private int[] raceStageIdArray;
+	private int theriderid = 0;
+	private int[] riderIDList = new int[1];
 	private Map<Integer, Double> stageLengths; //stores lenght internally
 	 
 
@@ -395,24 +397,26 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	@Override
 	public int createRider(int teamID, String name, int yearOfBirth)
 			throws IDNotRecognisedException, IllegalArgumentException {
-		if (!name.getClass().equals(String.class)||name.equals(null)){
-			throw new IDNotRecognisedException("Name must be String!");
-		};
+		for (List<Object> riderDetails : teams) {
+			int existingID = (int) riderDetails.get(0); 
+			if (existingID!=teamID) {
+				throw new IDNotRecognisedException("Rider already exists: " + teamID);
+			}
+		}
 		for (List<Object> riderDetails : teams) {
 			String existingName = (String) riderDetails.get(1); 
 			if (existingName.equals(name)) {
 				throw new IllegalArgumentException("Rider already exists: " + name);
 			}
 		}
-		theraceID++;
+		theriderid++;
 		for (List<Object> riderDetails : teams) {
-			String existingName = (String) riderDetails.get(1); 
-			if (existingName.equals(name)) {
-				throw new IllegalArgumentException("Rider already exists: " + name);
+			int existingID = (int) riderDetails.get(0); 
+			if (existingID==teamID) {
+				teams.add(Arrays.asList(theriderid,name, yearOfBirth));
 			}
 		}
-		teams.add(Arrays.asList(theraceID,name, yearOfBirth));
-		return 0;
+		return theriderid;
 	}
 
 	
