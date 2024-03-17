@@ -24,6 +24,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private ArrayList<List<Object>> race = new ArrayList<>();
 	private ArrayList<List<Object>> teams = new ArrayList<>();
 	private ArrayList<List<Object>> stage = new ArrayList<>();
+	private ArrayList<List<Object>> riders = new ArrayList<>();
 	private int theraceID = 0;
 	private int[] raceIDsList = new int[1];
 	private int theteamID = 0;
@@ -391,6 +392,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	@Override
 	public int[] getTeamRiders(int teamId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
+		// teamIDsList = Arrays.stream(teamIDsList).filter(id -> id != teamId).toArray();
 		return null;
 	}
 
@@ -400,22 +402,23 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 		for (List<Object> riderDetails : teams) {
 			int existingID = (int) riderDetails.get(0); 
 			if (existingID!=teamID) {
-				throw new IDNotRecognisedException("Rider already exists: " + teamID);
+				throw new IDNotRecognisedException("ID not recognised: " + teamID);
 			}
 		}
+
 		for (List<Object> riderDetails : teams) {
 			String existingName = (String) riderDetails.get(1); 
 			if (existingName.equals(name)) {
 				throw new IllegalArgumentException("Rider already exists: " + name);
 			}
 		}
+
 		theriderid++;
-		for (List<Object> riderDetails : teams) {
-			int existingID = (int) riderDetails.get(0); 
-			if (existingID==teamID) {
-				teams.add(Arrays.asList(theriderid,name, yearOfBirth));
-			}
-		}
+		int[] updatedRiderIDsList = Arrays.copyOf(riderIDList, theriderid);
+		updatedRiderIDsList[theriderid - 1] = theriderid;
+		riderIDList = updatedRiderIDsList;
+
+		riders.add(Arrays.asList(teamID,theriderid, name, yearOfBirth));
 		return theriderid;
 	}
 
