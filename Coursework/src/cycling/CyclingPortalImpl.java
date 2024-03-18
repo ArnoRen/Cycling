@@ -437,7 +437,20 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpoints)
 			throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointTimesException,
 			InvalidStageStateException {
-		// TODO Auto-generated method stub
+		for (List<Object> stageDetails : stage) {
+			int existingID = (int) stageDetails.get(0); 
+			if (existingID!=stageId) {
+				throw new IDNotRecognisedException("ID not recognised: " + stageId);
+			}
+		}
+
+		for (List<Object> riderDetails : riders) {
+			int existingID = (int) riderDetails.get(0); 
+			if (existingID!=riderId) {
+				throw new IDNotRecognisedException("ID not recognised: " + riderId);
+			}
+		}
+
 
 	}
 
