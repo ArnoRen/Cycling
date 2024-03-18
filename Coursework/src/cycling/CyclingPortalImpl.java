@@ -451,6 +451,11 @@ public int addStageToRace(int raceId, String stageName, String description, doub
  * BUNLARIN HEPSİNİ FOR DÖNGÜSÜ İÇİNDE HER TAKIM İÇİN YAPARSAN HER RIDER IN BİLGİSİNİ ALABİLİRSİN
  */
 
+ /*
+  * Arrays.sort(array);    küçükten büyüğe sırala
+  * Arrays.sort(arr, Collections.reverseOrder());   büyükten küçüğe sırala
+  */
+
 	@Override
 	public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
 		// TODO Auto-generated method stub
@@ -518,7 +523,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
         List<Object> raceDetails = race.get(i);
         String raceName = (String) raceDetails.get(1);
         if (raceName.equals(name)) {
-            raceIndex = i;
+            raceIndex = i-1;
             break;
         	}
     	}
