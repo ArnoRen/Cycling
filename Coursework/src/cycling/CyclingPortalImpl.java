@@ -2,6 +2,7 @@ package cycling;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private int[] raceStageIdArray;
 	private int theriderid = 0;
 	private int[] riderIDList = new int[1];
+	int raceIndex = 0;
 	private Map<Integer, Double> stageLengths; //stores lenght internally
 	 
 
@@ -511,9 +513,19 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public void removeRaceByName(String name) throws NameNotRecognisedException {
+
+		for (int i = 0; i < race.size(); i++) {
+        List<Object> raceDetails = race.get(i);
+        String raceName = (String) raceDetails.get(1);
+        if (raceName.equals(name)) {
+            raceIndex = i;
+            break;
+        	}
+    	}
+
 		race.removeIf(race -> (String) race.get(1) == name);
 
-		raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceId).toArray();
+		raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceIndex).toArray();
 
 	}
 
