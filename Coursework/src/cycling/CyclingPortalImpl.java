@@ -263,8 +263,10 @@ public int addStageToRace(int raceId, String stageName, String description, doub
             }
 		}
 		//@param stageId - The ID of the stage to which the climb checkpoint is being added.
-	stageId++; // Incrementing the stageId after using it
-	teams.add(Arrays.asList(stageId,name, description)); // Adding the stageId to the list of stage IDs
+		// call the class from classStage
+	
+	stageId++; 
+	teams.add(Arrays.asList(stageID , name, description));
 
 	int[] updatedRaceStageIdArray = Arrays.copyOf(raceStageIdArray, stageId);
 	updatedRaceStageIdArray[stageId - 1] = stageId;

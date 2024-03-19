@@ -73,4 +73,9 @@ public class classStage {
   public Double getAverageGradient() {
     return averageGradient;
   }
+
+  public void addCheckpoint(int stageID, String name, String description){
+  }
+ 
+
 }
