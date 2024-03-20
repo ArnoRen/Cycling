@@ -76,6 +76,5 @@ public class classStage {
 
   public void addCheckpoint(int stageID, String name, String description){
   }
- 
 
 }

@@ -263,16 +263,22 @@ public int addStageToRace(int raceId, String stageName, String description, doub
             }
 		}
 		//@param stageId - The ID of the stage to which the climb checkpoint is being added.
-		// call the class from classStage
-	
-	stageId++; 
-	teams.add(Arrays.asList(stageID , name, description));
 
-	int[] updatedRaceStageIdArray = Arrays.copyOf(raceStageIdArray, stageId);
-	updatedRaceStageIdArray[stageId - 1] = stageId;
-	raceStageIdArray = updatedRaceStageIdArray;
-	return stageId;
-		}
+		classStage stageInstance = new classStage();
+		int stageID = stageInstance.getStageID(); // Call the instance method getStageID() on the created instance
+		ClimbCheckpoint climbCheckpoint = new ClimbCheckpoint(location, type, averageGradient, length);
+		stageInstance.addCheckpoint(climbCheckpoint);
+		// Return the ID of the stage to which the climb checkpoint is being added
+		return stageID;
+		
+
+
+		//@param location - The kilometre location where the climb finishes within the stage.
+	}
+
+
+	
+
 	// @param location The kilometre location where the climb finishes within the stage.
 
 
