@@ -37,6 +37,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private int[] riderIDList = new int[1];
 	int raceIndex = 0;
 	private Map<Integer, Double> stageLengths; //stores lenght internally
+
 	 
 
 	@Override
@@ -208,14 +209,26 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	//??????????????????????????????
 	@Override
 	public void removeStageById(int stageId) throws IDNotRecognisedException {
-		/*
-		 * race.removeIf(race -> (int) race.get(0) == raceId);
+		if(raceIdNames.get(stageId) == null){
+			throw new IDNotRecognisedException("ID not attached to a stage");
+		}
+		else{
+		String thisName = stageIdName.get(stageId);
+		int[] removeRaces = stageRaces.get(stageId);
+		for (Integer j: stageArray){
+			if(stageArray[j] == stageId){
+				stageArray[i] = -1;
+			}
+			raceStages.remove(thisRace);
+			raceStages.put(thisRace, stageArray;
+		}
+	}
+	stageIdNames.remove(stageId);
+	stageNameIds.remove(thisName);
+	stageNames.remove(thisName);
+	}
 
-			raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceId).toArray();
-		 * 
-		 * Race den kaldırma böyle, 2. de race id listten kaldırıyor
-		 */
-		// TODO Auto-generated method stub
+
 
 	}
 
@@ -264,8 +277,9 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 		}
 		//@param stageId - The ID of the stage to which the climb checkpoint is being added.
 
-		classStage stageInstance = new classStage();
-		int stageID = stageInstance.getStageID(); // Call the instance method getStageID() on the created instance
+		classStage climbcheckpoint;
+		return stageId;
+		int stageID = climbcheckpoint.getStageId(); // Call the instance method getStageID() on the created instance
 		ClimbCheckpoint climbCheckpoint = new ClimbCheckpoint(location, type, averageGradient, length);
 		stageInstance.addCheckpoint(climbCheckpoint);
 		// Return the ID of the stage to which the climb checkpoint is being added
@@ -439,6 +453,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 		riders.removeIf(riders -> (int) riders.get(0) == riderId);
 
 		riderIDList = Arrays.stream(riderIDList).filter(id -> id != riderId).toArray();
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -458,6 +473,10 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 				throw new IDNotRecognisedException("ID not recognised: " + riderId);
 			}
 		}
+
+		for (int i=0; i<=riders.size();i++){
+			
+		};
 		
 		// TODO Auto-generated method stub
 
