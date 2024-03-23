@@ -1,14 +1,14 @@
 package cycling;
 
 public class CheckPointId {
-    private double lenght;
+    private double length;
     private double averageGradient;
     private double location;
     private CheckpointType type;
     private int CheckPointID;
 
-public CheckPointId(double lenght, double averageGradient, double location, CheckpointType type, int CheckPointID){
-    this.lenght = lenght;
+public CheckPointId(double length, double averageGradient, double location, CheckpointType type, int CheckPointID){
+    this.length = length;
     this.averageGradient = averageGradient;
     this.location = location;
     this.type = type;
@@ -16,7 +16,7 @@ public CheckPointId(double lenght, double averageGradient, double location, Chec
 }
 
 public double getLength() {
-    return lenght;
+    return length;
 }
 
 public double averageGradient() {

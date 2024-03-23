@@ -94,6 +94,8 @@ public class CyclingPortalImpl implements CyclingPortal {
 		race.removeIf(race -> (int) race.get(0) == raceId);
 
 		raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceId).toArray();
+
+		//TODO Race removlanırsa sonucu da kaldır
 	}
 
 
@@ -294,9 +296,26 @@ public int addStageToRace(int raceId, String stageName, String description, doub
             if (id == stageId && state.equals("waiting for results")) {
                 throw new InvalidStageStateException("Stage is in 'waiting for results' state");
             }
-		}
-		return null;
+		
 		//@param stageId - The ID of the stage to which the climb checkpoint is being added.
+		CheckPointId newCheckpoint = new CheckPointId (length, averageGradient, location, type, id);
+		Map<String, CheckPointId> CheckPointIds = new HashMap<>();
+		List<CheckPointId> CheckPointId = CheckPointId.get(stageId);
+		int newcheckpointId = CheckPointIds;
+		if (CheckPointIds == null) { //to check if the stage ID recognized 
+            throw new IDNotRecognisedException("Stage ID not recognized.");
+        }
+		CheckPointIds.add(newCheckpoint);
+		newcheckpointId++;
+		return newcheckpointId;
+
+		}
+
+		
+		
+
+
+
 
 		//@param location - The kilometre location where the climb finishes within the stage.
 	}
@@ -399,6 +418,12 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 		teamIDsList = Arrays.stream(teamIDsList).filter(id -> id != teamId).toArray();
 
+		for (List<Object> riderDetails : riders) {
+			int existingID = (int) riderDetails.get(0); 
+			if (existingID==teamId) {
+				riders.remove(riderDetails);
+			}
+		}
 	}
 
 	@Override
@@ -415,8 +440,8 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	@Override
 	public int createRider(int teamID, String name, int yearOfBirth)
 			throws IDNotRecognisedException, IllegalArgumentException {
-		for (List<Object> riderDetails : teams) {
-			int existingID = (int) riderDetails.get(0); 
+		for (List<Object> teamDetails : teams) {
+			int existingID = (int) teamDetails.get(0); 
 			if (existingID!=teamID) {
 				throw new IDNotRecognisedException("ID not recognised: " + teamID);
 			}
@@ -441,7 +466,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	@Override
 	public void removeRider(int riderId) throws IDNotRecognisedException {
 
-		riders.removeIf(riders -> (int) riders.get(0) == riderId);
+		riders.removeIf(riders -> (int) riders.get(1) == riderId);
 
 		riderIDList = Arrays.stream(riderIDList).filter(id -> id != riderId).toArray();
 	}
@@ -461,14 +486,14 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 		}
 
 		for (List<Object> riderDetails : riders) { //aynı stage de 2 tane olmasın
-			int existingID = (int) riderDetails.get(0); 
+			int existingID = (int) riderDetails.get(1); 
 			if (existingID==riderId) {
 				//TODO 
 			}
 		}
 
 		for (List<Object> riderDetails : riders) {
-			int existingID = (int) riderDetails.get(0); 
+			int existingID = (int) riderDetails.get(1); 
 			if (existingID!=riderId) {
 				throw new IDNotRecognisedException("ID not recognised: " + riderId);
 			}
@@ -476,7 +501,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 		for (int i=0; i<=riders.size(); i++) {
 			List<Object> tempList = riders.get(i);
-			int existingID = (int) tempList.get(0);
+			int existingID = (int) tempList.get(1);
 			if (existingID == riderId){
 				tempList.add(addthat);
 			}
@@ -574,6 +599,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 		raceIDsList = Arrays.stream(raceIDsList).filter(id -> id != raceIndex).toArray();
 
+		//TODO Race removlanırsa sonucu da kaldır
 	}
 
 	@Override
