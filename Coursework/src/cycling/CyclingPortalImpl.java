@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -536,7 +537,14 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 						List<Object> innerList = (List<Object>) obj;
 						int stageInInnerList = (int) innerList.get(0);
 						if(stageInInnerList==stageId){
-							return;
+							// Filter the LocalTime objects from the inner list
+                        	List<LocalTime> riderResults = innerList.stream()
+                                .filter(item -> item instanceof LocalTime)
+                                .map(item -> (LocalTime) item)
+                                .collect(Collectors.toList());
+                        // Convert the list to an array and return
+							LocalTime[] end = riderResults.toArray(new LocalTime[riderResults.size()]);
+                       		return end;
 						}
 					}
 				}
