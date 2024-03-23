@@ -26,6 +26,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private ArrayList<List<Object>> teams = new ArrayList<>();
 	private ArrayList<List<Object>> stage = new ArrayList<>();
 	private ArrayList<List<Object>> riders = new ArrayList<>();
+	private int id = 0;
 	private int theraceID = 0;
 	private int[] raceIDsList = new int[1];
 	private int theteamID = 0;
@@ -42,7 +43,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private Map<String, Object> stageNames = new HashMap<String, Object>();
 	private Map<Integer, List<Integer>> raceStages = new HashMap<Integer, List<Integer>>();
 	private Map<Integer, Integer> stageRaces = new HashMap<Integer, Integer>();
-
+	private HashMap<Integer, CheckPointId> CheckPointIds = new HashMap<Integer, CheckPointId>();
 	 
 
 	@Override
@@ -259,7 +260,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	public int addCategorizedClimbToStage(int stageId, Double location, CheckpointType type, Double averageGradient,
 			Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException,
 			InvalidStageTypeException {
-	
+		int newcheckpointId = id;
 		// Check if the race ID exists
     	boolean raceStageIdBool = false;
     	for (List<Object> raceStageIdList : race) {
@@ -299,18 +300,12 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 		
 		//@param stageId - The ID of the stage to which the climb checkpoint is being added.
 		CheckPointId newCheckpoint = new CheckPointId (length, averageGradient, location, type, id);
-		Map<String, CheckPointId> CheckPointIds = new HashMap<>();
-		List<CheckPointId> CheckPointId = CheckPointId.get(stageId);
-		int newcheckpointId = CheckPointIds;
-		if (CheckPointIds == null) { //to check if the stage ID recognized 
-            throw new IDNotRecognisedException("Stage ID not recognized.");
-        }
-		CheckPointIds.add(newCheckpoint);
-		newcheckpointId++;
-		return newcheckpointId;
+		CheckPointIds.put(id , newCheckpoint);
+		id++;
+		
 
 		}
-
+		return newcheckpointId;
 		
 		
 
@@ -485,10 +480,18 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 			}
 		}
 
-		for (List<Object> riderDetails : riders) { //aynı stage de 2 tane olmasın
+		for (List<Object> riderDetails : riders) {
 			int existingID = (int) riderDetails.get(1); 
 			if (existingID==riderId) {
-				//TODO 
+				for (Object obj : riderDetails){
+					if(obj instanceof List){
+						List<Object> innerList = (List<Object>) obj;
+						int stageInInnerList = (int) innerList.get(0);
+						if(stageInInnerList==stageId){
+							throw new DuplicatedResultException("Duplicated Result"+ addthat);
+						}
+					}
+				}
 			}
 		}
 
@@ -525,9 +528,21 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		for (List<Object> riderDetails : riders) {
+			int existingID = (int) riderDetails.get(1); 
+			if (existingID==riderId) {
+				for (Object obj : riderDetails){
+					if(obj instanceof List){
+						List<Object> innerList = (List<Object>) obj;
+						int stageInInnerList = (int) innerList.get(0);
+						if(stageInInnerList==stageId){
+							return;
+						}
+					}
+				}
+			}
+		}
+	} //TODO
 
 	@Override
 	public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
