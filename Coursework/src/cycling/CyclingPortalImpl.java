@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 
 
 /**
@@ -669,8 +671,12 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public void saveCyclingPortal(String filename) throws IOException {
-		// TODO Auto-generated method stub
-
+		try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filename))) {
+			outputStream.writeObject(this);
+		} catch (IOException e) {
+			// If an IOException occurs, throw it to indicate failure
+			throw new IOException(e);
+		}
 	}
 
 	@Override
