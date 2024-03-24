@@ -14,6 +14,12 @@ public CheckPointId(double length, double averageGradient, double location, Chec
     this.type = type;
     this.CheckPointID = CheckPointID;
 }
+public CheckPointId(double location, int CheckPointID){
+    this.location = location;
+    this.CheckPointID = CheckPointID;
+    this.type = CheckpointType.SPRINT;
+}
+
 
 public double getLength() {
     return length;

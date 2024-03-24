@@ -32,20 +32,29 @@ public class CyclingPortalImpl implements CyclingPortal {
 	private int[] raceIDsList = new int[1];
 	private int theteamID = 0;
 	private int[] teamIDsList = new int[1];
+	private int CheckPointID = 0;
+	//private int[] CheckPointIDs = new int[1];
 	//private int raceStageId = 0;
 	//private int[] raceStageIdList = new int[1];
 	//private int[] raceStageIdArray;
 	private int theriderid = 0;
 	private int[] riderIDList = new int[1];
 	int raceIndex = 0;
-	private Map<Integer, Double> stageLengths = new HashMap<Integer, Double>();
-	private Map<String, Integer> stageNameToId = new HashMap<String, Integer>();
-	private Map<Integer, String> stageIdToName = new HashMap<Integer, String>();
-	private Map<String, Object> stageNames = new HashMap<String, Object>();
-	private Map<Integer, List<Integer>> raceStages = new HashMap<Integer, List<Integer>>();
-	private Map<Integer, Integer> stageRaces = new HashMap<Integer, Integer>();
+	private HashMap<Integer, Double> stageLengths = new HashMap<Integer, Double>();
+	private HashMap<String, Integer> stageNameToId = new HashMap<String, Integer>();
+	private HashMap<Integer, String> stageIdToName = new HashMap<Integer, String>();
+	private HashMap<String, Object> stageNames = new HashMap<String, Object>();
+	private HashMap<Integer, List<Integer>> raceStages = new HashMap<Integer, List<Integer>>();
+	private HashMap<Integer, Integer> stageRaces = new HashMap<Integer, Integer>();
 	private HashMap<Integer, CheckPointId> CheckPointIds = new HashMap<Integer, CheckPointId>();
-	 
+	//private HashMap<Integer, CheckPointId> CheckPointIdName = new HashMap<Integer, CheckPointId>();
+	private HashMap<Integer, int[]> stageCheckpoints = new HashMap<Integer, int[]>(); //stage ID and list of the checkpointIDs -- use that to remove checkpoint 
+	private int[] Checkpoints = new int[220];  //list of checkpoints
+	private HashMap<Integer, Integer> CheckpointStage = new HashMap<Integer, Integer>();
+	private HashMap<Integer, int[]> stagecheckpoint = new HashMap<Integer, int[]>();
+	private HashMap<Integer, String> StagePreparation = new HashMap<Integer, String>();
+	private HashMap<Integer, String> RaceIdNames = new HashMap<Integer, String>();
+	private HashMap<Integer, Double> stageIDtolenght = new HashMap<Integer, Double>();
 
 	@Override
 	public int[] getRaceIds() {
@@ -101,7 +110,7 @@ public class CyclingPortalImpl implements CyclingPortal {
 	}
 
 
-	@Override
+@Override
 	public int getNumberOfStages(int raceId) throws IDNotRecognisedException {
 		// check if the provided raceId exists in the system using stream().noneMatch()
 		//noneMatch() of Stream class returns whether no elements of this stream match the provided predicate.
@@ -123,20 +132,20 @@ public class CyclingPortalImpl implements CyclingPortal {
 public int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime, StageType type)
         throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException {
 
-    // Check if the race ID exists
-    boolean raceIdExists = false;
-    for (List<Object> raceDetails : race) {
-        int id = (int) raceDetails.get(0);
-        if (id == raceId) {
-			//the unique ID of the stage.
-            raceIdExists = true;
-            break;
-        }
-    }
-	//If the ID does not match to any race in the system.
-    if (!raceIdExists) {
-        throw new IDNotRecognisedException("Race ID not recognized: " + raceId);
-    }
+        // Check if the race ID exists
+		boolean raceIdExists = false;
+		for (List<Object> raceDetails : race) {
+			int id = (int) raceDetails.get(0);
+			if (id == raceId) {
+				raceIdExists = true;
+				break;
+			}
+		}
+	
+		// If the race ID is not recognized, throw IDNotRecognisedException
+		if (!raceIdExists) {
+			throw new IDNotRecognisedException("Race ID not recognized: " + raceId);
+		}
 
     // Check if the stage name is valid
 	//an identifier name for the stage
@@ -149,8 +158,15 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
     // stage name exist?
 	//throw illegalnameexception if the name already exist in the platorm
-	if (stage.stream().anyMatch(stageDetails -> ((String) stageDetails.get(1)).equals(stageName))) {
-    	throw new IllegalNameException("A stage name already exists in the platform: " + stageName);
+	if (stage.stream().anyMatch(stageDetails -> {
+		Object stageDetail = stageDetails.get(1);
+		if (stageDetail instanceof String) {
+			return ((String) stageDetail).equals(stageName);
+		} else {
+			return false; // Or handle the case when stageDetail is not a String
+		}
+	})) {
+		throw new IllegalNameException("A stage name already exists in the platform: " + stageName);
 	}
 
     // Check if the length is valid
@@ -167,10 +183,13 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	// Create a new stage and add it to the list
 	int uniqueStageID = stage.size() + 1; //+1 is used to generate a unique identifier in this stage
 
-	// Add the new stage to the list
+	//adding new stage to the list 
 	stage.add(Arrays.asList(raceId, uniqueStageID, stageName, description, length, startTime, type));
+	stageLengths.put(uniqueStageID, length);
 
-	// Return the unique ID of the stage
+
+
+	//Return the unique ID of the stage
 	return uniqueStageID;
 		}
 
@@ -217,7 +236,13 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public void removeStageById(int stageId) throws IDNotRecognisedException {
-		if (stageNameToId.containsKey(stageId)) {
+
+		if (race.stream().noneMatch(raceDetails -> (int) raceDetails.get(0) == stageId)) {
+			// If the race ID is not recognized, throw IDNotRecognisedException. 
+			throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
+		}
+
+		if (stageIdToName.containsKey(stageId)) {
     		String thisName = stageIdToName.get(stageId); 
     		stageNameToId.remove(thisName); 
     		stageIdToName.remove(stageId); 
@@ -277,6 +302,9 @@ public int addStageToRace(int raceId, String stageName, String description, doub
     	if (!raceStageIdBool) {
         	throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
     	}
+		if(RaceIdNames.get(stageId) == null){
+			throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
+		}
 		
 		//@throws InvalidStageTypeException  Time-trial stages cannot contain any checkpoint. ---check if the stage type is not time-trial
         for (List<Object> stage : race) {
@@ -286,6 +314,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
                 throw new InvalidStageTypeException("Time-trial stages cannot contain any checkpoint");
             }
         }
+		
 		//@throws InvalidLocationException   If the location is out of bounds of the stage length.  Check if the location is within the bounds of the stage length
         if (location < 0 || location > length) {
             throw new InvalidLocationException("Location is out of bounds of the stage length");
@@ -299,35 +328,26 @@ public int addStageToRace(int raceId, String stageName, String description, doub
                 throw new InvalidStageStateException("Stage is in 'waiting for results' state");
             }
 		
-		//@param stageId - The ID of the stage to which the climb checkpoint is being added.
 		CheckPointId newCheckpoint = new CheckPointId (length, averageGradient, location, type, id);
 		CheckPointIds.put(id , newCheckpoint);
+		Checkpoints[id] = id; //list of id 
+		//id = id of the checkpoint
 		id++;
-		
+		stageCheckpoints.remove(stageId);//remove the old one
+		stageCheckpoints.put(stageId, Checkpoints);	//put the new one
 
 		}
 		return newcheckpointId;
 		
-		
-
-
-
-
-		//@param location - The kilometre location where the climb finishes within the stage.
 	}
-
-
-	
-
-	// @param location The kilometre location where the climb finishes within the stage.
-
 
 	
 	@Override
 	public int addIntermediateSprintToStage(int stageId, double location) throws IDNotRecognisedException,
 			InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
 		Double length = stageLengths.get(stageId);
-		// Check if the race ID exists
+		int newId = id;
+		//Check if the race ID exists
     	boolean raceStageIdBool = false;
     	for (List<Object> raceStageIdList : race) {
         	int id = (int) raceStageIdList.get(0);
@@ -338,10 +358,12 @@ public int addStageToRace(int raceId, String stageName, String description, doub
         	}
     	}
 	//If the ID does not match to any race in the system.
-    	if (!raceStageIdBool) {
-        	throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
-    	}
-
+		if (!raceStageIdBool) {
+			throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
+		}
+		if(RaceIdNames.get(stageId)== null){
+			throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
+		}
 		
 	//@throws InvalidStageTypeException  Time-trial stages cannot contain any checkpoint. ---check if the stage type is not time-trial
         for (List<Object> stage : race) {
@@ -364,27 +386,71 @@ public int addStageToRace(int raceId, String stageName, String description, doub
             if (id == stageId && state.equals("waiting for results")) {
                 throw new InvalidStageStateException("Stage is in 'waiting for results' state");
             }
-	}
-	return ;
+		
+		//create a new checkpoint
+		CheckPointId newCheckpoint = new CheckPointId(location, id);
+		//CheckPointID = id
+		int[] existedcheckpoints = stageCheckpoints.get(stageId);
+		Integer existednumber = existedcheckpoints.length;
+		existedcheckpoints[existednumber] = CheckPointID;
+		//CheckPointIDs is a list 
+		CheckPointIds.put(id , newCheckpoint);
+		Checkpoints[id] = id; //list of id 
+		//id = id of the checkpoint
+		id++;
+		stageCheckpoints.remove(stageId);//remove the old one
+		stageCheckpoints.put(stageId, Checkpoints);	//put the new one
+		}
+		return newId;
 	
 	}
+
 	
 
 	@Override
 	public void removeCheckpoint(int checkpointId) throws IDNotRecognisedException, InvalidStageStateException {
+		int stageId = CheckpointStage.get(checkpointId);
+		int [] removeCheckpoint = stageCheckpoints.get(stageId);
+		for(Integer i: removeCheckpoint){
+			if (removeCheckpoint[i] == checkpointId){
+				removeCheckpoint[i] = -1;
+			}
 
+		}
+		//remove the data from all the hashmaps
+		stageCheckpoints.remove(stageId);
+		stagecheckpoint.remove(stageId);
+		stageCheckpoints.put(stageId, removeCheckpoint);
+		StagePreparation.remove(stageId);
 	}
 
 	@Override
 	public void concludeStagePreparation(int stageId) throws IDNotRecognisedException, InvalidStageStateException {
-		// TODO Auto-generated method stub
-
+		StagePreparation.remove(stageId);
+		StagePreparation.put(stageId, "waiting for results");
 	}
 
 	@Override
 	public int[] getStageCheckpoints(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		if (!stageNameToId.containsValue(stageId)) {
+			throw new IDNotRecognisedException("Stage ID not recognized: " + stageId);
+		}
+		if (!stageCheckpoints.containsKey(stageId)) {
+			return new int[0];
+		}
+		int[] checkpoints = stageCheckpoints.get(stageId);
+
+		List<Integer> validCheckpointList = new ArrayList<>(); //to store the valid checkpoints(just for this part)
+		for (int checkpointId : checkpoints) {
+			if (checkpointId != -1) { //to check if the checkpoint removed before
+				validCheckpointList.add(checkpointId); //if it is valid add to the list
+			}
+		}
+		int[] validCheckpoints = new int[validCheckpointList.size()]; //convert the list to the array
+		for (int i = 0; i < validCheckpointList.size(); i++) {
+			validCheckpoints[i] = validCheckpointList.get(i);
+		}
+		return validCheckpoints;
 	}
 
 	@Override
@@ -470,9 +536,13 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	@Override
 	public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpoints)
 			throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointTimesException,
-			InvalidStageStateException { //TODO InvalidStage and Invalid Checkpoints
+			InvalidStageStateException { //TODO InvalidStage
 		
 		List<Object>addthat=Arrays.asList(stageId, checkpoints);
+		
+		if(checkpoints.length!= stageIDtolenght.get(stageId)){
+			throw new InvalidCheckpointTimesException("Invalid Checkpoint Times:" + checkpoints.length);
+		}
 		
 		for (List<Object> stageDetails : stage) {
 			int existingID = (int) stageDetails.get(0); 
@@ -527,30 +597,33 @@ public int addStageToRace(int raceId, String stageName, String description, doub
   * Arrays.sort(arr, Collections.reverseOrder());   büyükten küçüğe sırala
   */
 
-	@Override
-	public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		for (List<Object> riderDetails : riders) {
-			int existingID = (int) riderDetails.get(1); 
-			if (existingID==riderId) {
-				for (Object obj : riderDetails){
-					if(obj instanceof List){
-						List<Object> innerList = (List<Object>) obj;
-						int stageInInnerList = (int) innerList.get(0);
-						if(stageInInnerList==stageId){
-							// Filter the LocalTime objects from the inner list
-                        	List<LocalTime> riderResults = innerList.stream()
-                                .filter(item -> item instanceof LocalTime)
-                                .map(item -> (LocalTime) item)
-                                .collect(Collectors.toList());
-                        // Convert the list to an array and return
-							LocalTime[] end = riderResults.toArray(new LocalTime[riderResults.size()]);
-                       		return end;
-						}
-					}
-				}
-			}
-		}
-	} //TODO
+  @Override
+  public LocalTime[] getRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
+	  for (List<Object> riderDetails : riders) {
+		  int existingID = (int) riderDetails.get(1); 
+		  if (existingID == riderId) {
+			  for (Object obj : riderDetails) {
+				  if (obj instanceof List) {
+					  List<Object> innerList = (List<Object>) obj;
+					  int stageInInnerList = (int) innerList.get(0);
+					  if (stageInInnerList == stageId) {
+						  List<LocalTime> riderResults = innerList.stream()
+								  .filter(item -> item instanceof LocalTime)
+								  .map(item -> (LocalTime) item)
+								  .collect(Collectors.toList());
+						  LocalTime[] end = riderResults.toArray(new LocalTime[riderResults.size()]);
+						  return end;
+					  }
+				  }
+			  }
+			  // If the specified stage is not found for the rider, return null or throw an exception
+			  // throw new IDNotRecognisedException("Stage ID not recognised for rider: " + stageId);
+			  // return null;
+		  }
+	  }
+	  // If the rider ID is not found, throw an exception
+	  throw new IDNotRecognisedException("Rider ID not recognised: " + riderId);
+  }
 
 	@Override
 	public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
