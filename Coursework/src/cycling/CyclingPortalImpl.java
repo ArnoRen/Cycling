@@ -421,6 +421,16 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 			}
 
 		}
+		if(RaceIdNames.get(stageId)== null){
+			throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
+		}
+		for (List<Object> stage : race) {
+					int id = (int) stage.get(0);
+					String state = (String) stage.get(1);
+					if (id == stageId && state.equals("waiting for results")) {
+						throw new InvalidStageStateException("Stage is in 'waiting for results' state");
+					}
+				}
 		//remove the data from all the hashmaps
 		stageCheckpoints.remove(stageId);
 		stagecheckpoint.remove(stageId);
@@ -432,6 +442,16 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	public void concludeStagePreparation(int stageId) throws IDNotRecognisedException, InvalidStageStateException {
 		StagePreparation.remove(stageId);
 		StagePreparation.put(stageId, "waiting for results");
+		if(RaceIdNames.get(stageId)== null){
+			throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
+		}
+		for (List<Object> stage : race) {
+					int id = (int) stage.get(0);
+					String state = (String) stage.get(1);
+					if (id == stageId && state.equals("waiting for results")) {
+						throw new InvalidStageStateException("Stage is in 'waiting for results' state");
+					}
+				}
 	}
 
 	@Override
