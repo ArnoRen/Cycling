@@ -37,7 +37,7 @@ public class TestAddIntermediateSprintToStage {
 
     public static void testAddIntermediateSprintToInvalidStageID() {
         CyclingPortalImpl objectUnderTest = new CyclingPortalImpl(); // Replace YourClassName with the actual class name
-        int invalidStageId = 999; // Assuming an invalid stage ID
+        int invalidStageId =963; // Assuming an invalid stage ID
         double validLocation = 50.0; // Assuming a valid location
         try {
             objectUnderTest.addIntermediateSprintToStage(invalidStageId, validLocation);

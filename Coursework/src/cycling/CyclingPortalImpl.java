@@ -631,7 +631,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		LocalTime[] ridersone =getRiderResultsInStage(stageId, riderId);
 		return null;
 	}
 
@@ -683,19 +683,7 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
-		try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename))) {
-        // Deserialize and replace the current state of MiniCyclingPortal with the contents from the file
-        MiniCyclingPortal loadedPortal = (MiniCyclingPortal) inputStream.readObject();
-        // Copy the loaded state to this instance
-        this.race = new ArrayList<>(loadedPortal.race);
-        this.teams = new ArrayList<>(loadedPortal.teams);
-        this.theraceID = loadedPortal.theraceID;
-        // Copy any other fields as needed
-    } catch (IOException | ClassNotFoundException e) {
-        // If any exceptions occur during loading, re-throw them to indicate failure
-        throw e;
-    }
-
+		//TODO
 	}
 
 	@Override

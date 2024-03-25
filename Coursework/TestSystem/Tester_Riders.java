@@ -13,12 +13,11 @@ public class Tester_Riders {
         MiniCyclingPortal portal = new CyclingPortalImpl();
 
         try {
-            System.out.println(portal.createTeam("Porsche Penske","Porsche 963"));
-        } catch (IllegalNameException e) {
-            e.printStackTrace();
-        } catch (InvalidNameException e) {
-            e.printStackTrace();
-        }
+               System.out.println(portal.createRider(1,"Matt Campbell",2004));
+           } catch (IllegalArgumentException | IDNotRecognisedException e) {
+               e.printStackTrace();
+           }
+        
 
         try {
             System.out.println(portal.createTeam("AF Course","499P"));
