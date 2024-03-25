@@ -349,65 +349,65 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 	@Override
 	public int addIntermediateSprintToStage(int stageId, double location) throws IDNotRecognisedException,
 			InvalidLocationException, InvalidStageStateException, InvalidStageTypeException {
-		Double length = stageLengths.get(stageId);
+
 		int newId = id;
-		//Check if the race ID exists
-    	boolean raceStageIdBool = false;
-    	for (List<Object> raceStageIdList : race) {
-        	int id = (int) raceStageIdList.get(0);
-        	if (id == stageId) {
-		//the unique ID of the stage.
-            	raceStageIdBool = true;	
-            	break;
-        	}
-    	}
-	//If the ID does not match to any race in the system.
-		if (!raceStageIdBool) {
-			throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
-		}
-		if(RaceIdNames.get(stageId)== null){
-			throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
-		}
-		
-	//@throws InvalidStageTypeException  Time-trial stages cannot contain any checkpoint. ---check if the stage type is not time-trial
-        for (List<Object> stage : race) {
-            int id = (int) stage.get(0);
-            String stageType = (String) stage.get(2);
-            if (id == stageId && stageType.equals("time-trial")) {
-                throw new InvalidStageTypeException("Time-trial stages cannot contain any checkpoint");
-            }
-        }
-		//@throws InvalidLocationException   If the location is out of bounds of the stage length.  Check if the location is within the bounds of the stage length
-         if (location < 0 || location > length){
-            throw new InvalidLocationException("Location is out of bounds of the stage length");
-        }
 
-
-	// @throws InvalidStageStateException If the stage is "waiting for results". Check if the stage is not in "waiting for results" state
-        for (List<Object> stage : race) {
-            int id = (int) stage.get(0);
-            String state = (String) stage.get(1);
-            if (id == stageId && state.equals("waiting for results")) {
-                throw new InvalidStageStateException("Stage is in 'waiting for results' state");
-            }
-		
-		//create a new checkpoint
-		CheckPointId newCheckpoint = new CheckPointId(location, id);
-		//CheckPointID = id
-		int[] existedcheckpoints = stageCheckpoints.get(stageId);
-		Integer existednumber = existedcheckpoints.length;
-		existedcheckpoints[existednumber] = CheckPointID;
-		//CheckPointIDs is a list 
-		CheckPointIds.put(id , newCheckpoint);
-		Checkpoints[id] = id; //list of id 
-		//id = id of the checkpoint
-		id++;
-		stageCheckpoints.remove(stageId);//remove the old one
-		stageCheckpoints.put(stageId, Checkpoints);	//put the new one
-		}
-		return newId;
-	
-	}
+				//Check if the race ID exists
+				boolean raceStageIdBool = false;
+				for (List<Object> raceStageIdList : race) {
+					int raceId = (int) raceStageIdList.get(0);
+					if (raceId == stageId) {
+						raceStageIdBool = true;
+						break;
+					}
+				}
+				
+				if (!raceStageIdBool) {
+					throw new IDNotRecognisedException("Race ID not recognized: " + stageId);
+				}
+			
+				//@throws InvalidStageTypeException  Time-trial stages cannot contain any checkpoint.
+				for (List<Object> stage : race) {
+					int id = (int) stage.get(0);
+					String stageType = (String) stage.get(2);
+					if (id == stageId && stageType.equals("time-trial")) {
+						throw new InvalidStageTypeException("Time-trial stages cannot contain any checkpoint");
+					}
+				}
+			
+				//Check if the location is within the bounds of the stage length otherwise, throw an exception
+				Double length = stageLengths.get(stageId);
+				if (location < 0 || location > length) {
+					throw new InvalidLocationException("Location is out of bounds of the stage length");
+				}
+			
+				//Check if the stage is not in "waiting for results" state, otherwise throw an exception
+				for (List<Object> stage : race) {
+					int id = (int) stage.get(0);
+					String state = (String) stage.get(1);
+					if (id == stageId && state.equals("waiting for results")) {
+						throw new InvalidStageStateException("Stage is in 'waiting for results' state");
+					}
+				}
+			
+				//create a new checkpoint
+				CheckPointId newCheckpoint = new CheckPointId(location, id);
+				int[] existedcheckpoints = stageCheckpoints.get(stageId);
+				if (existedcheckpoints == null) {
+					existedcheckpoints = new int[1];
+				} else {
+					int existednumber = existedcheckpoints.length;
+					int[] newCheckpoints = Arrays.copyOf(existedcheckpoints, existednumber + 1);
+					existedcheckpoints = newCheckpoints;
+				}
+				existedcheckpoints[existedcheckpoints.length - 1] = CheckPointID;
+				CheckPointIds.put(id, newCheckpoint);
+				Checkpoints[id] = id;
+				id++;
+				stageCheckpoints.put(stageId, existedcheckpoints);
+			
+				return newId;
+			}
 
 	
 
@@ -499,8 +499,9 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public int[] getTeamRiders(int teamId) throws IDNotRecognisedException {
+		
 		int[] getriderIDList = Arrays.stream(riderIDList).filter(id -> id == teamId).toArray();
-		return getriderIDList;
+		return getriderIDList; //TODO
 	}
 
 	@Override

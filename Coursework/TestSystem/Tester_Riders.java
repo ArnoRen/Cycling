@@ -17,33 +17,19 @@ public class Tester_Riders {
            } catch (IllegalArgumentException | IDNotRecognisedException e) {
                e.printStackTrace();
            }
+
+           try {
+            System.out.println(portal.createRider(1,"Vanthoor",2006));
+        } catch (IllegalArgumentException | IDNotRecognisedException e) {
+            e.printStackTrace();
+        }
         
 
         try {
-            System.out.println(portal.createTeam("AF Course","499P"));
-        } catch (IllegalNameException e) {
-            e.printStackTrace();
-        } catch (InvalidNameException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            System.out.println(portal.createTeam("AF Course","499P"));
-        } catch (IllegalNameException e) {
-            e.printStackTrace();
-        } catch (InvalidNameException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(Arrays.toString(portal.getTeams()));
-
-        try {
-            portal.removeTeam(2);
+            System.out.println(Arrays.toString(portal.getTeamRiders(1)));
         } catch (IDNotRecognisedException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        System.out.println(Arrays.toString(portal.getTeams()));
-    }
-    
+}
 }
