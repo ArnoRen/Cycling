@@ -16,7 +16,9 @@ import java.time.LocalTime;
  */
 public interface MiniCyclingPortal extends Serializable {
 
-	/**
+	Object teams = null;
+
+    /**
 	 * Get the races currently created in the platform.
 	 * 
 	 * @return An array of race IDs in the system or an empty array if none exists.

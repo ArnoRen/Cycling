@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 
 /**
@@ -681,7 +683,18 @@ public int addStageToRace(int raceId, String stageName, String description, doub
 
 	@Override
 	public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
+		try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename))) {
+        // Deserialize and replace the current state of MiniCyclingPortal with the contents from the file
+        MiniCyclingPortal loadedPortal = (MiniCyclingPortal) inputStream.readObject();
+        // Copy the loaded state to this instance
+        this.race = new ArrayList<>(loadedPortal.race);
+        this.teams = new ArrayList<>(loadedPortal.teams);
+        this.theraceID = loadedPortal.theraceID;
+        // Copy any other fields as needed
+    } catch (IOException | ClassNotFoundException e) {
+        // If any exceptions occur during loading, re-throw them to indicate failure
+        throw e;
+    }
 
 	}
 
